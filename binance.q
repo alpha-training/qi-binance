@@ -1,7 +1,10 @@
+/import tp
+.qi.import`ipc
+
 / 1. The Connection Logic
 host:":wss://stream.binance.com:443";
-tickers:`btcusdt`ethusdt`solusdt;
-bars:"@kline_1m"
+tickers:`btcusdt`ethusdt`solusdt; / tickers here? 
+bars:"@kline_1m"  / choose data type here
 tickerspath:"/"sv string[tickers],\:bars
 path:"/stream?streams=",tickerspath;
 
