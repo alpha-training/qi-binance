@@ -8,9 +8,8 @@ path:"/stream?streams=",tickers;
 / Construct the header with the specific resource path
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 
-/ The Binance Data Handler
 .binance.start:{[tp]
-    .b.tp::tp
+    .b.tp::tp;
     .z.ws:{[msg]
         raw:.j.k msg;
         / UNWRAP: If 'data' is a key, the real message is inside it
