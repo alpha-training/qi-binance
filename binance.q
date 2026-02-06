@@ -3,23 +3,21 @@
 
 / 1. The Connection Logic
 host:":wss://stream.binance.com:443";
-tickers:`btcusdt`ethusdt`solusdt; / tickers here? 
-bars:"@kline_1m"  / choose data type here
-tickers:"/"sv string[tickers],\:bars
+tickers:"/"sv string[.conf.tickers],\:.conf.data  / lower lower 
 path:"/stream?streams=",tickers;
-
 / Construct the header with the specific resource path
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 
 / The Binance Data Handler
-.binance.start:{[tickerplant]
+.binance.start:{[tp]
+    .b.tp::tp
     .z.ws:{[msg]
         raw:.j.k msg;
         / UNWRAP: If 'data' is a key, the real message is inside it
         data:$[`data in key raw;raw`data;raw];
         if[data[`e]~"kline";
             k:data`k;
-            neg[.ipc.conn tickerplant](`.u.upd;`$data`e;(
+            neg[.ipc.conn .b.tp](`.u.upd;`$data`e;(
                 12h$1970.01.01D+1000000*7h$k`t;
                 `$k`s;
                 "F"$k`o;
