@@ -5,8 +5,8 @@
 host:":wss://stream.binance.com:443";
 tickers:`btcusdt`ethusdt`solusdt; / tickers here? 
 bars:"@kline_1m"  / choose data type here
-tickerspath:"/"sv string[tickers],\:bars
-path:"/stream?streams=",tickerspath;
+tickers:"/"sv string[tickers],\:bars
+path:"/stream?streams=",tickers;
 
 / Construct the header with the specific resource path
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
