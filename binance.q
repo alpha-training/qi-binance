@@ -3,7 +3,7 @@
 
 / 1. The Connection Logic
 host:":wss://stream.binance.com:443";
-tickers:"/"sv string[.conf.tickers],\:.conf.data  / lower lower 
+tickers:"/"sv("," vs .conf.tickers),\:.conf.data  / lower lower 
 path:"/stream?streams=",tickers;
 / Construct the header with the specific resource path
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
