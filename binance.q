@@ -1,39 +1,35 @@
 \e 1
 /import tp
 .qi.import`ipc
+.qi.frompkg[`binance;`norm]
+\d .binance
+.qi.loadschemas`binance
 
-/ 1. The Connection Logic
-host:":wss://stream.binance.com:443";
-tickers:"/"sv("," vs .conf.tickers),\:.conf.data  / lower lower 
+tickers:"/"sv("," vs .conf.tickers),\:.conf.data
 path:"/stream?streams=",tickers;
-/ Construct the header with the specific resource path
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 
-.binance.start:{[tp]
-    .b.tp::tp;
-    .z.ws:{[msg]
-        raw:.j.k msg;
-        / UNWRAP: If 'data' is a key, the real message is inside it
-        data:$[`data in key raw;raw`data;raw];
-        if[data[`e]~"kline";
-            k:data`k;
-            neg[.ipc.conn .b.tp](`.u.upd;`$data`e;(
-                12h$1970.01.01D+1000000*7h$k`t;
-                `$k`s;
-                "F"$k`o;
-                "F"$k`h;
-                "F"$k`l;
-                "F"$k`c;
-                ("F"$k`q)%"F"$k`v;
-                "F"$k`v
-            ));
-            / Updated print statement to show WHICH symbol closed
-            if[k`x;-1 "qi.binance: [CLOSED] ",k[`s]," at ",k`c];
-        ];
-    };
-    / 4. Open the Handle
-    w:hsym[`$host]header;
-    $[first w>0;-1 "AlphaKDB: Connection Success with . Handle: ",first string w 0;-1 "AlphaKDB: Connection Failed"];
+insertlocal:{
+    (t:$[x`x;`BinanceKline1m;`BinanceKline2s])insert norm.kline x;
+    if[not`g=attr get[t]`sym;update`g#sym from t]
+ }
+sendtotp:{neg[H](`.u.upd;$[x`x;`BinanceKline1m;`BinanceKline2s];norm.kline x)}
+.z.ws:{
+    data:$[`data in key d:.j.k[x]`data;d`data;d];
+    if[data[`e]~"kline";
+        $[.qi.isproc;sendtotp;insertlocal]data`k]
  }
 
-
+start:{[target]
+    if[.qi.isproc;
+        if[null H::.ipc.conn .qi.tosym target;
+            if[null H::first c:.ipc.tryconnect target;
+            .log.fatal"Could not connect to ",.qi.tostr[target]," '",last[c],"'. Exiting"]];] 
+    .log.info "Connection sequence initiated...";
+    if[not h:first c:.qi.try[.conf.url;header;0Ni];
+        .log.error err:c 2;
+        if[err like"*Protocol*";
+            if[.z.o in`l64`m64;
+                .log.info"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
+    if[h;.log.info"Connection success"];
+ }
