@@ -2,8 +2,8 @@
 /import tp
 .qi.import`ipc
 .qi.frompkg[`binance;`norm]
+
 \d .binance
-.qi.loadschemas`binance
 
 tickers:"/"sv("," vs .conf.tickers),\:.conf.data
 path:"/stream?streams=",tickers;
