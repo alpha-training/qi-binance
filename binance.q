@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 .qi.import`ipc;
 .qi.import`log;
-=======
-\e 1
-
-.qi.import`ipc
->>>>>>> 2f3076e7b176af29b20e0445b2baa0a169afb8c0
 .qi.frompkg[`binance;`norm]
 
 \d .binance
