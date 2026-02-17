@@ -1,5 +1,5 @@
 \e 1
-/import tp
+
 .qi.import`ipc
 .qi.frompkg[`binance;`norm]
 
