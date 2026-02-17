@@ -3,8 +3,9 @@
 .qi.frompkg[`binance;`norm]
 
 \d .binance
+.qi.import`binance
 
-tickers:"/"sv("," vs .conf.tickers),\:.conf.data
+tickers:"/"sv("," vs .conf.TICKERS),\:.conf.DATA
 path:"/stream?streams=",tickers;
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 
@@ -27,7 +28,7 @@ start::{
             if[null H::first c:.ipc.tryconnect .ipc.conns[`tp1]`port;
             .log.fatal"Could not connect to ",.qi.tostr[target]," '",last[c],"'. Exiting"]];] 
     .log.info "Connection sequence initiated...";
-    if[not h:first c:.qi.try[.conf.url;header;0Ni];
+    if[not h:first c:.qi.try[.conf.URL;header;0Ni];
         .log.error err:c 2;
         if[err like"*Protocol*";
             if[.z.o in`l64`m64;
@@ -36,5 +37,4 @@ start::{
  }
 
 \d .
-
-
+ 
