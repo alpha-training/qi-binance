@@ -13,7 +13,9 @@ insertlocal:{
     (t:$[x`x;`BinanceKline1m;`BinanceKline2s])insert norm.kline x;
     if[not`g=attr get[t]`sym;update`g#sym from t]
  }
+
 sendtotp:{neg[H](`.u.upd;$[x`x;`BinanceKline1m;`BinanceKline2s];norm.kline x)}
+
 .z.ws:{
     data:$[`data in key d:.j.k[x]`data;d`data;d];
     if[data[`e]~"kline";
