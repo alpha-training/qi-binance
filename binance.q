@@ -26,8 +26,8 @@ sendtotp:{neg[H](`.u.upd;$[x`x;`BinanceKline1m;`BinanceKline2s];norm.kline x)}
 start::{
     if[.qi.isproc;
         if[null H::.ipc.conn target:.proc.self`depends_on;
-            if[null H::first c:.ipc.tryconnect .ipc.conns[`tp1]`port;
-            .log.fatal"Could not connect to ",.qi.tostr[first target]," '",last[c],"'. Exiting"]];] 
+            if[null H::first .ipc.tryconnect .ipc.conns[`tp1]`port;
+            .log.fatal"Could not connect to ",.qi.tostr[first target]," - Exiting"]];] 
     .log.info "Connection sequence initiated...";
     if[not h:first c:.qi.try[URL;header;0Ni];
         .log.error err:c 2;
