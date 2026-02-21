@@ -1,5 +1,4 @@
 .qi.import`ipc;
-.qi.import`log;
 .qi.frompkg[`binance;`norm]
 
 \d .binance
@@ -27,14 +26,14 @@ start::{
     if[.qi.isproc;
         if[null H::.ipc.conn target:.proc.self`depends_on;
             if[null H::first .ipc.tryconnect .ipc.conns[`tp1]`port;
-            .log.fatal"Could not connect to ",.qi.tostr[first target]," - Exiting"]];] 
-    .log.info "Connection sequence initiated...";
+            .qi.fatal"Could not connect to ",.qi.tostr[first target]," - Exiting"]];] 
+    .qi.info "Connection sequence initiated...";
     if[not h:first c:.qi.try[URL;header;0Ni];
-        .log.error err:c 2;
+        .qi.error err:c 2;
         if[err like"*Protocol*";
             if[.z.o in`l64`m64;
-                .log.info"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
-    if[h;.log.info"Connection success"];
+                .qi.info"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
+    if[h;.qi.info"Connection success"];
  }
 
 \d .
