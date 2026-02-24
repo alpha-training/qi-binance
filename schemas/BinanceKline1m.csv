@@ -6,3 +6,5 @@ low,f
 close,f
 vwap,f
 volume,f
+feedtime,p
+tptime,p

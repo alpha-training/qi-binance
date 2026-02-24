@@ -8,5 +8,7 @@ norm.kline:{
             "F"$x`l;
             "F"$x`c;
             ("F"$x`q)%"F"$x`v;
-            "F"$x`v)
+            "F"$x`v;
+            .z.p;
+            0Np)
  }
