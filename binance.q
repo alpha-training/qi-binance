@@ -32,7 +32,7 @@ start::{
         .qi.error err:c 2;
         if[err like"*Protocol*";
             if[.z.o in`l64`m64;
-                .qi.info"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
+                .qi.fatal"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
     if[h;.qi.info"Connection success"];
  }
 
