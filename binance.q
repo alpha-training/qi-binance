@@ -1,5 +1,6 @@
 .qi.import`ipc;
 .qi.frompkg[`binance;`norm]
+.qi.frompkg[`proc;`feed]
 
 \d .binance
 
@@ -8,35 +9,15 @@ path:"/stream?streams=",tickers;
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 URL:`:wss://stream.binance.com:443
 
+TD:01b!`BinanceKline2s`BinanceKline1m
 
-insertlocal:{
-    (t:$[x`x;`BinanceKline1m;`BinanceKline2s])insert norm.kline x;
-    if[not`g=attr get[t]`sym;update`g#sym from t]
- }
-
-sendtotp:{neg[H](`.u.upd;$[x`x;`BinanceKline1m;`BinanceKline2s];norm.kline x)}
+msg.data:{[k] .feed.upd[TD k`x;norm.kline k]}
 
 .z.ws:{
     data:$[`data in key d:.j.k[x]`data;d`data;d];
-    if[data[`e]~"kline";
-        $[.qi.isproc;sendtotp;insertlocal]data`k]
- }
+    if[data[`e]~"kline";msg.data data`k]
+    }
 
-start::{
-    if[.qi.isproc;
-        if[null H::.ipc.conn target:.proc.self`depends_on;
-            if[null H::first .ipc.tryconnect .ipc.conns[`tp1]`port;
-            .qi.fatal"Could not connect to ",.qi.tostr[first target]," - Exiting"]];] 
-    .qi.info "Connection sequence initiated...";
-    if[not h:first c:.qi.try[URL;header;0Ni];
-        .qi.error err:c 2;
-        if[err like"*conn*";
-            if[.z.o in`w64;
-            .qi.fatal"Try setting the env variable:\n$env:PATH += \";",.qi.ospath[.qi.pkgs`$"deps-win"],"\"; $env:SSL_VERIFY_SERVER = \"NO\""]]
-        if[err like"*Protocol*";
-            if[.z.o in`l64`m64;
-                .qi.fatal"Try setting the env variable:\nexport SSL_VERIFY_SERVER=NO"]]];
-    if[h;.qi.info"Connection success"];
- }
+start::{.feed.start[header;URL]}
 
 \d .
