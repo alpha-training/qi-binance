@@ -4,7 +4,7 @@
 
 \d .binance
 
-tickers:"/"sv("," vs .conf.TICKERS),\:.conf.BINANCE_DATA
+tickers:"/"sv("," vs .conf.BINANCE_TICKERS),\:.conf.BINANCE_DATA
 path:"/stream?streams=",tickers;
 header:"GET ",path," HTTP/1.1\r\nHost: stream.binance.com\r\nConnection: Upgrade\r\nUpgrade: websocket\r\n\r\n";
 URL:`:wss://stream.binance.com:443
